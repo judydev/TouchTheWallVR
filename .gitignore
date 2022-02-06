@@ -1,5 +1,6 @@
-node_modules
 _site
+.jekyll-cache
+node_modules
 main.js
 main.js.LICENSE.txt
 bundle.js.LICENSE.txt
