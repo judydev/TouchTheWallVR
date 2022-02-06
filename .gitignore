@@ -1,5 +1,5 @@
 node_modules
-bundle.js
-bundle.js.LICENSE.txt
+_site
 main.js
 main.js.LICENSE.txt
+bundle.js.LICENSE.txt
