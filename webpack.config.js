@@ -8,7 +8,7 @@ var config = {
         filename: "bundle.js",
         path: path.resolve(__dirname, "dist"),
     },
-    plugins: [new HtmlWebpackPlugin({ template: "./dist/index.html" })],
+    plugins: [new HtmlWebpackPlugin({ template: "./index.html" })],
 };
 
 module.exports = () => {
