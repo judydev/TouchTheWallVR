@@ -11,14 +11,14 @@ import { makeButtonMesh } from "./utils/lib";
 
 export function addButtonConsole(world, scene) {
     const floorGeometry = new THREE.PlaneGeometry(4, 4);
-    const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xdadada });
+    const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     scene.add(floor);
 
     const consoleGeometry = new THREE.BoxGeometry(0.5, 0.12, 0.15);
-    const consoleMaterial = new THREE.MeshPhongMaterial({ color: 0xdadada });
+    const consoleMaterial = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
     const consoleMesh = new THREE.Mesh(consoleGeometry, consoleMaterial);
     consoleMesh.position.set(0, 1, -0.3);
     consoleMesh.castShadow = true;
@@ -69,18 +69,17 @@ export function addButtonConsole(world, scene) {
         // start button action
         // TODO: 3s count down
         // TODO: 1min count down
-
         // lit random block (2 at the same time)
         // const rand = Math.round(Math.random() * m * n);
         // console.log("rand", rand);
         // console.log(group.getObjectByName("wallblock-" + rand));
         // const obj = group.getObjectByName("wallblock-" + rand);
         // obj.material.color.setHex(0xdaa6ff);
-        setTimeout(() => {
-            setInterval(() => {
-                litWallBlock(getRandomWallBlock());
-            }, 1000);
-        }, 36000);
+        // setTimeout(() => {
+        //     setInterval(() => {
+        //         litWallBlock(getRandomWallBlock());
+        //     }, 1000);
+        // }, 36000);
     };
 
     sbEntity.addComponent(Button, {
