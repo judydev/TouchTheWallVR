@@ -11,7 +11,11 @@ import {
     TagComponent,
     Types,
 } from "three/examples/jsm/libs/ecsy.module.js";
-import { createButtonWithText } from "./utils/ui";
+import {
+    addWallBlocks,
+    getRandomWallBlock,
+    litWallBlock,
+} from "./addWallBlocks";
 
 class Object3D extends Component {}
 
@@ -265,6 +269,7 @@ function makeButtonMesh(x, y, z, color) {
 }
 
 function init() {
+    let interval;
     const container = document.createElement("div");
     document.body.appendChild(container);
 
@@ -338,53 +343,54 @@ function init() {
     scene.add(hand2);
 
     // add wall blocks
-    const group = new THREE.Group();
-    scene.add(group);
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 4; j++) {
-            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.1);
-            const material = new THREE.MeshStandardMaterial({
-                color: 0x333333,
-                roughness: 0.7,
-                metalness: 0.0,
-            });
+    addWallBlocks(scene);
+    // const group = new THREE.Group();
+    // scene.add(group);
+    // for (let i = 0; i < 5; i++) {
+    //     for (let j = 0; j < 4; j++) {
+    //         const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.1);
+    //         const material = new THREE.MeshStandardMaterial({
+    //             color: 0x333333,
+    //             roughness: 0.7,
+    //             metalness: 0.0,
+    //         });
 
-            const object = new THREE.Mesh(geometry, material);
-            object.position.set(-1 + 0.55 * i, 0.28 + 0.55 * j, -1);
+    //         const object = new THREE.Mesh(geometry, material);
+    //         object.position.set(-1 + 0.55 * i, 0.28 + 0.55 * j, -1);
 
-            // object.castShadow = true;
-            // object.receiveShadow = true;
+    //         // object.castShadow = true;
+    //         // object.receiveShadow = true;
 
-            group.add(object);
-        }
-    }
+    //         group.add(object);
+    //     }
+    // }
 
     // add menu buttons
-    const buttonGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.1);
-    let material = new THREE.MeshPhongMaterial({ color: "green" });
+    // const buttonGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.1);
+    // let material = new THREE.MeshPhongMaterial({ color: "green" });
 
-    const startButton = new THREE.Mesh(buttonGeometry, material);
-    startButton.position.set(-1.5, 1.2, -1);
-    const startButtonText = createText("Start", 0.1);
-    startButton.add(startButtonText);
-    startButtonText.position.set(0, 0, 0.05);
-    scene.add(startButton);
+    // const startButton = new THREE.Mesh(buttonGeometry, material);
+    // startButton.position.set(-1.5, 1.2, -1);
+    // const startButtonText = createText("Start", 0.1);
+    // startButton.add(startButtonText);
+    // startButtonText.position.set(0, 0, 0.05);
+    // scene.add(startButton);
 
-    material = new THREE.MeshPhongMaterial({ color: "yellow" });
-    const pauseButton = new THREE.Mesh(buttonGeometry, material);
-    pauseButton.position.set(-1.5, 0.9, -1);
-    const pauseButtonText = createText("Pause", 0.1);
-    pauseButton.add(pauseButtonText);
-    pauseButtonText.position.set(0, 0, 0.05);
-    scene.add(pauseButton);
+    // material = new THREE.MeshPhongMaterial({ color: "yellow" });
+    // const pauseButton = new THREE.Mesh(buttonGeometry, material);
+    // pauseButton.position.set(-1.5, 0.9, -1);
+    // const pauseButtonText = createText("Pause", 0.1);
+    // pauseButton.add(pauseButtonText);
+    // pauseButtonText.position.set(0, 0, 0.05);
+    // scene.add(pauseButton);
 
-    material = new THREE.MeshPhongMaterial({ color: "red" });
-    const stopButton = new THREE.Mesh(buttonGeometry, material);
-    stopButton.position.set(-1.5, 0.6, -1);
-    const stopButtonText = createText("Stop", 0.1);
-    stopButton.add(stopButtonText);
-    stopButtonText.position.set(0, 0, 0.05);
-    scene.add(stopButton);
+    // material = new THREE.MeshPhongMaterial({ color: "red" });
+    // const stopButton = new THREE.Mesh(buttonGeometry, material);
+    // stopButton.position.set(-1.5, 0.6, -1);
+    // const stopButtonText = createText("Stop", 0.1);
+    // stopButton.add(stopButtonText);
+    // stopButtonText.position.set(0, 0, 0.05);
+    // scene.add(stopButton);
 
     // buttons
     const floorGeometry = new THREE.PlaneGeometry(4, 4);
@@ -402,13 +408,21 @@ function init() {
     consoleMesh.receiveShadow = true;
     scene.add(consoleMesh);
 
-    const orangeButton = makeButtonMesh(0.08, 0.1, 0.08, 0xffd3b5);
-    orangeButton.position.set(-0.15, 0.04, 0);
-    consoleMesh.add(orangeButton);
+    const startButton = makeButtonMesh(0.08, 0.1, 0.08, "green");
+    const startButtonText = createText("Start", 0.03);
+    startButton.add(startButtonText);
+    startButtonText.rotation.x = -Math.PI / 2;
+    startButtonText.position.set(0, 0.051, 0);
+    startButton.position.set(-0.15, 0.04, 0);
+    consoleMesh.add(startButton);
 
-    const pinkButton = makeButtonMesh(0.08, 0.1, 0.08, 0xe84a5f);
-    pinkButton.position.set(-0.05, 0.04, 0);
-    consoleMesh.add(pinkButton);
+    const pauseButton = makeButtonMesh(0.08, 0.1, 0.08, "yellow");
+    const pauseButtonText = createText("Pause", 0.03);
+    pauseButton.add(pauseButtonText);
+    pauseButtonText.rotation.x = -Math.PI / 2;
+    pauseButtonText.position.set(0, 0.051, 0);
+    pauseButton.position.set(-0.05, 0.04, 0);
+    consoleMesh.add(pauseButton);
 
     const resetButton = makeButtonMesh(0.08, 0.1, 0.08, 0x355c7d);
     const resetButtonText = createText("reset", 0.03);
@@ -425,13 +439,6 @@ function init() {
     exitButtonText.position.set(0, 0.051, 0);
     exitButton.position.set(0.15, 0.04, 0);
     consoleMesh.add(exitButton);
-
-    // const tkGeometry = new THREE.TorusKnotGeometry(0.5, 0.2, 200, 32);
-    // const tkMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
-    // tkMaterial.metalness = 0.8;
-    // const torusKnot = new THREE.Mesh(tkGeometry, tkMaterial);
-    // torusKnot.position.set(0, 1, -5);
-    // scene.add(torusKnot);
 
     const instructionText = createText(
         "Press [Start] to start game. When blocks are randomly lit, use both hands to turn them off. ",
@@ -471,24 +478,28 @@ function init() {
     csEntity.addComponent(NeedCalibration);
     csEntity.addComponent(Object3D, { object: consoleMesh });
 
-    const obEntity = world.createEntity();
-    obEntity.addComponent(Pressable);
-    obEntity.addComponent(Object3D, { object: orangeButton });
-    const obAction = function () {
-        // torusKnot.material.color.setHex(0xffd3b5);
+    const sbEntity = world.createEntity();
+    sbEntity.addComponent(Pressable);
+    sbEntity.addComponent(Object3D, { object: startButton });
+    const sbAction = function () {
+        // start action
+        interval = setInterval(() => {
+            litWallBlock();
+        }, 2000);
     };
 
-    obEntity.addComponent(Button, {
-        action: obAction,
+    sbEntity.addComponent(Button, {
+        action: sbAction,
         surfaceY: 0.05,
         fullPressDistance: 0.02,
     });
 
     const pbEntity = world.createEntity();
     pbEntity.addComponent(Pressable);
-    pbEntity.addComponent(Object3D, { object: pinkButton });
+    pbEntity.addComponent(Object3D, { object: pauseButton });
     const pbAction = function () {
-        // torusKnot.material.color.setHex(0xe84a5f);
+        // pause action
+        clearInterval(interval);
     };
 
     pbEntity.addComponent(Button, {
@@ -501,7 +512,7 @@ function init() {
     rbEntity.addComponent(Pressable);
     rbEntity.addComponent(Object3D, { object: resetButton });
     const rbAction = function () {
-        // torusKnot.material.color.setHex(0xffffff);
+        // reset action
     };
 
     rbEntity.addComponent(Button, {
@@ -527,10 +538,6 @@ function init() {
         recoverySpeed: 0.2,
         fullPressDistance: 0.03,
     });
-
-    // const tkEntity = world.createEntity();
-    // tkEntity.addComponent(Rotating);
-    // tkEntity.addComponent(Object3D, { object: torusKnot });
 
     const itEntity = world.createEntity();
     itEntity.addComponent(HandsInstructionText);
